@@ -2,3 +2,4 @@ pydicom
 numpy
 matplotlib
 opencv-python
+nibabel
