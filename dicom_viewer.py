@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-
+import nibabel as nib
 import cv2
 import numpy as np
 import pydicom
@@ -16,6 +16,11 @@ def load_dicom(dicom_path):
     image = image * slope + intercept
 
     return image, ds
+
+def load_nifti(nifti_path):
+    nii = nib.load(nifti_path)
+    image = nii.get_fdata().astype(np.float32)
+    return image
 
 
 def apply_window(image, window_center=None, window_width=None):
@@ -93,20 +98,26 @@ def main():
 
     args = parser.parse_args()
 
-    image, ds = load_dicom(args.dicom)
+    file_path = args.dicom
+
+if file_path.endswith(".nii") or file_path.endswith(".nii.gz"):
+    image = load_nifti(file_path)
+    ds = None
+else:
+    image, ds = load_dicom(file_path)
     if image.ndim == 3:
        image = image[image.shape[0] // 2]
 
     window_center = args.window_center
     window_width = args.window_width
 
-    if window_center is None:
+    if ds is not None and window_center is None:
         wc = getattr(ds, "WindowCenter", None)
         if isinstance(wc, pydicom.multival.MultiValue):
             wc = wc[0]
         window_center = float(wc) if wc is not None else None
 
-    if window_width is None:
+    if ds is not None and window_width is None:
         ww = getattr(ds, "WindowWidth", None)
         if isinstance(ww, pydicom.multival.MultiValue):
             ww = ww[0]
