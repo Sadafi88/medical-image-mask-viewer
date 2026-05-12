@@ -1,4 +1,4 @@
-# Simple DICOM Mask Viewer
+# Medical Image Mask Viewer
 
 A lightweight Python tool for visualizing DICOM medical images with optional segmentation mask overlay.
 
