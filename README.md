@@ -61,11 +61,6 @@ python dicom_viewer.py --dicom sample.nii.gz --mask mask.png
 python dicom_viewer.py --dicom sample.nii.gz --save output.png
 ```
 
-## Example
-
-Add a screenshot of the viewer output here:
-
-![Viewer Example](viewer_example.png)
 
 ## Applications
 
